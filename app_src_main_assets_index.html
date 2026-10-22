@@ -201,6 +201,39 @@ body #v2tb [data-c=render]{padding:0;border-radius:50%;margin-right:0}
 body #v2tb [data-c=sizeDown] svg,body #v2tb [data-c=sizeUp] svg{width:18px;height:18px}
 body #v2tb .sz{font:600 14px system-ui,sans-serif;min-width:28px;opacity:1;color:#171717}
 </style>
+<style id="v33css">
+/* v33: RGB animated render icon, no background */
+body #v2tb [data-c=render],body #v2tb [data-c=render].on,body #v2tb [data-c=render]:hover,body #v2tb [data-c=render]:active{color:var(--fg);background:none!important;background-image:none!important;box-shadow:none!important;border:0!important;padding:0!important;min-width:40px!important;border-radius:50%!important;margin-right:0!important}
+body #v2tb [data-c=render] svg.rgbico.go{animation:rgbpop 1.3s ease-out 1;filter:drop-shadow(0 0 4px currentColor)}
+@keyframes rgbpop{0%{color:#ff2d55;transform:scale(1) rotate(0)}15%{transform:scale(1.35) rotate(-12deg)}30%{color:#ff9f0a}45%{color:#30d158;transform:scale(1.2) rotate(10deg)}60%{color:#00d4ff}75%{color:#2d7bff;transform:scale(1.1) rotate(0)}90%{color:#bf5af2}100%{color:#ff2d55;transform:scale(1) rotate(0)}}
+/* keyboard toggle: no circle, the icon swap shows the state */
+body #v2tb [data-c=kb],body #v2tb [data-c=kb].on,body #v2tb [data-c=kb]:hover,body #v2tb [data-c=kb]:active{background:none!important;box-shadow:none!important}
+body #v2tb [data-c=kb]:not(.on){color:#8c8c8c}
+/* animated render result popup */
+#rpop{position:fixed;left:50%;top:calc(68px + env(safe-area-inset-top,0px));z-index:130;display:flex;align-items:center;gap:10px;padding:10px 18px 10px 12px;border-radius:18px;background:rgba(24,24,27,.95);color:#fff;font:600 14px system-ui,sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translate(-50%,-20px) scale(.8);max-width:92vw}
+#rpop.show{animation:rpIn .5s cubic-bezier(.2,1.4,.4,1) forwards}
+#rpop.hide{animation:rpOut .28s ease-in forwards}
+@keyframes rpIn{to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes rpOut{from{opacity:1;transform:translate(-50%,0) scale(1)}to{opacity:0;transform:translate(-50%,-14px) scale(.9)}}
+#rpop .ri{width:30px;height:30px;flex:none}
+#rpop .rc{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:70;stroke-dashoffset:70}
+#rpop.show .rc{animation:rpDraw .55s ease-out .12s forwards}
+#rpop.show .rm{animation:rpDraw .4s ease-out .5s forwards}
+#rpop .rm{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:30;stroke-dashoffset:30}
+@keyframes rpDraw{to{stroke-dashoffset:0}}
+#rpop.ok .rc,#rpop.ok .rm{stroke:#30d158}
+#rpop.none .rc,#rpop.none .rm{stroke:#ffb340}
+#rpop.err .rc,#rpop.err .rm,#rpop.warn .rc,#rpop.warn .rm{stroke:#ff453a}
+#rpop.none.show .ri{animation:rpShake .5s ease .5s}
+@keyframes rpShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+#rpop .rs{display:block;font-weight:500;font-size:12px;opacity:.7;margin-top:1px}
+@keyframes rgbcol{0%{color:#ff2d55}17%{color:#ff9f0a}33%{color:#30d158}50%{color:#00d4ff}67%{color:#2d7bff}83%{color:#bf5af2}100%{color:#ff2d55}}
+/* header hides when scrolling down, returns when scrolling up */
+#top{transition:transform .25s ease;will-change:transform}
+body.hdr-h #top{transform:translateY(-110%)}
+#pbar{transition:top .25s ease}
+body.hdr-h #pbar{top:0}
+</style>
 </head>
 <body>
 <div id="top"><button id="bList" title="All notes" aria-label="Back"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5L9 12L15 19"/></svg></button><input id="tIn" placeholder="Title" autocomplete="off"><button id="bMenu" aria-label="Menu"><svg viewBox="0 0 24 24" width="26" height="26"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M20 7L4 7"/><path d="M20 12L4 12"/><path d="M20 17L4 17"/></g></svg></button></div>
@@ -381,6 +414,38 @@ const V2_FONTS=[
     stack:'"Noto Serif Devanagari", "Noto Serif Bengali", Georgia, "Times New Roman", serif' },
   { key:'dancing', label:'Dancing Script', family:'Dancing Script', pkg:'dancing-script', ver:'5.1.1', weights:['400','700'], styles:['normal'],
     stack:'"Noto Sans Devanagari", "Noto Sans Bengali", "Segoe Script", "Brush Script MT", cursive' },
+  { key:'opensans', label:'Open Sans', family:'Open Sans', pkg:'open-sans', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'roboto', label:'Roboto', family:'Roboto', pkg:'roboto', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Arial, sans-serif' },
+  { key:'inter', label:'Inter', family:'Inter', pkg:'inter', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'poppins', label:'Poppins', family:'Poppins', pkg:'poppins', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'raleway', label:'Raleway', family:'Raleway', pkg:'raleway', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'ubuntu', label:'Ubuntu', family:'Ubuntu', pkg:'ubuntu', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'josefin', label:'Josefin Sans', family:'Josefin Sans', pkg:'josefin-sans', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'quicksand', label:'Quicksand', family:'Quicksand', pkg:'quicksand', ver:'5.1.1', weights:['400','700'], styles:['normal'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'comfortaa', label:'Comfortaa', family:'Comfortaa', pkg:'comfortaa', ver:'5.1.1', weights:['400','700'], styles:['normal'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif' },
+  { key:'oswald', label:'Oswald', family:'Oswald', pkg:'oswald', ver:'5.1.1', weights:['400','700'], styles:['normal'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", Impact, "Arial Narrow", sans-serif' },
+  { key:'merriweather', label:'Merriweather', family:'Merriweather', pkg:'merriweather', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Serif Devanagari", "Noto Serif Bengali", Georgia, "Times New Roman", serif' },
+  { key:'ptserif', label:'PT Serif', family:'PT Serif', pkg:'pt-serif', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Serif Devanagari", "Noto Serif Bengali", Georgia, "Times New Roman", serif' },
+  { key:'crimson', label:'Crimson Text', family:'Crimson Text', pkg:'crimson-text', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Serif Devanagari", "Noto Serif Bengali", Georgia, "Times New Roman", serif' },
+  { key:'pacifico', label:'Pacifico', family:'Pacifico', pkg:'pacifico', ver:'5.1.1', weights:['400'], styles:['normal'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", "Segoe Script", "Brush Script MT", cursive' },
+  { key:'lobster', label:'Lobster', family:'Lobster', pkg:'lobster', ver:'5.1.1', weights:['400'], styles:['normal'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", "Segoe Script", "Brush Script MT", cursive' },
+  { key:'sourcecode', label:'Source Code Pro', family:'Source Code Pro', pkg:'source-code-pro', ver:'5.1.1', weights:['400','700'], styles:['normal','italic'],
+    stack:'"Noto Sans Devanagari", "Noto Sans Bengali", ui-monospace, Menlo, Consolas, monospace' },
   { key:'mono', label:'Mono', family:'Noto Sans Mono', pkg:'noto-sans-mono', ver:'5.1.1', weights:['400','700'], styles:['normal'], stack:null }
 ];
 const V2_FONT_STACKS={}, V2_FONT_BY_FAMILY={};
@@ -697,8 +762,11 @@ const TE={
       renderHTML:o=>['div',TT.mergeAttributes({'data-type':'math-block','class':'tex-block'},o.HTMLAttributes)],
       renderText:o=>'$$'+o.node.attrs.latex+'$$' });
     // rendered-mode extensions
+    TE.Strike=TT.Strike.extend({ addAttributes(){ return { color:{ default:null,
+      parseHTML:el=>el.getAttribute('data-sc')||null,
+      renderHTML:a=>a.color?{'data-sc':a.color,style:'text-decoration-color:'+a.color}:{} } }; } });
     TE.EXTENSIONS=[
-      TT.StarterKit, TT.Underline, TT.Highlight, TT.TextStyle, TT.Color, TE.FontSize, TE.FontFam, TE.Indent, TE.Pages,
+      TT.StarterKit.configure({ strike:false }), TE.Strike, TT.Underline, TT.Highlight.configure({ multicolor:true }), TT.TextStyle, TT.Color, TE.FontSize, TE.FontFam, TE.Indent, TE.Pages,
       TT.Link.configure({ openOnClick:false, autolink:false, linkOnPaste:false }),
       TT.Table.configure({ resizable:false }), TT.TableRow, TT.TableHeader, TT.TableCell,
       TT.TaskList, TT.TaskItem.configure({ nested:true }),
@@ -709,8 +777,8 @@ const TE={
     TE.RAW_EXTENSIONS=[
       TT.StarterKit.configure({ heading:false, bulletList:false, orderedList:false, listItem:false, blockquote:false,
         codeBlock:false, code:false, horizontalRule:false, bold:false, italic:false, strike:false }),
-      TT.Bold.extend(noRules), TT.Italic.extend(noRules), TT.Strike.extend(noRules),
-      TT.Underline, TT.Highlight.extend(noRules), TT.TextStyle, TT.Color, TE.FontSize, TE.FontFam
+      TT.Bold.extend(noRules), TT.Italic.extend(noRules), TE.Strike.extend(noRules),
+      TT.Underline, TT.Highlight.configure({ multicolor:true }).extend(noRules), TT.TextStyle, TT.Color, TE.FontSize, TE.FontFam
     ];
     // @font-face for every face + one .v2c.<key> class per picker font
     if(!document.getElementById('v2FontCss')){
@@ -935,8 +1003,14 @@ const V2TB=(function(){
   let el=null,pal=null,fpop=null,box=null,sizeLbl=null,fontBtn=null,colBtn=null;
   const SIZES=[0.6,0.75,0.9,1,1.15,1.3,1.5,1.75,2,2.5,3,4];
   const COLORS=['#111111','#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#2563eb','#7c3aed','#db2777','#6b7280'];
-  const TBI={"undo": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M4 7H15C17.7614 7 20 9.23857 20 12C20 14.7614 17.7614 17 15 17H8.00001M7 10L4 7L7 4\"/></svg>", "redo": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M20 7H9.00001C6.23858 7 4 9.23857 4 12C4 14.7614 6.23858 17 9 17H16M17 10L20 7L17 4\"/></svg>", "multi": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><path d=\"M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z\"/><path d=\"M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5\"/></g></svg>", "done": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linejoin=\"round\" d=\"M8.5 12.5L10.5 14.5L15.5 9.5\"/></g></svg>", "sizeDown": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M15 12H9\"/></g></svg>", "sizeUp": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15\"/></g></svg>", "bold": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M7 5h6a3.5 3.5 0 0 1 0 7H7zm6 7h1a3.5 3.5 0 0 1 0 7H7v-7\"/></svg>", "italic": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M11 5h6M7 19h6m1-14l-4 14\"/></svg>", "underline": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M7 5v5a5 5 0 0 0 10 0V5M5 19h14\"/></svg>", "strike": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M5 12h14m-3-5.5A4 2 0 0 0 12 5h-1a3.5 3.5 0 0 0 0 7h2a3.5 3.5 0 0 1 0 7h-1.5a4 2 0 0 1-4-1.5\"/></svg>", "bullet": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M3.25 17.5a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493L21.25 13H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5z\"/></svg>", "bulletNext": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M7.25 17.5a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h10.5a.75.75 0 0 1 .102 1.493l-.102.007h-10.5a.75.75 0 0 1-.102-1.493zh10.5zm-7.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493L21.25 13H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5z\"/></svg>", "outdent": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M20 6h-7m7 6h-9m9 6h-7M8 8l-4 4l4 4\"/></svg>", "indent": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M20 6H9m11 6h-7m7 6H9M4 8l4 4l-4 4\"/></svg>", "highlight": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M20.259 2.004a.75.75 0 0 1 .742.649l.007.102l-.004 4.497a2.254 2.254 0 0 1-2.001 2.234v2.26a2.25 2.25 0 0 1-2.096 2.245l-.154.005H16.5v2.792a2.25 2.25 0 0 1-1.14 1.958l-.155.08l-6.635 3.106a.75.75 0 0 1-1.061-.579l-.007-.1v-7.257H7.25A2.25 2.25 0 0 1 5.005 11.9L5 11.746v-2.26a2.25 2.25 0 0 1-1.994-2.072L3 7.25V2.754a.75.75 0 0 1 1.493-.102l.007.102V7.25c0 .38.282.694.648.744L5.25 8h13.501c.38 0 .695-.283.746-.649l.007-.101l.004-4.497a.75.75 0 0 1 .75-.75M15 13.996H9.003v6.077l5.567-2.606a.75.75 0 0 0 .424-.572l.008-.107zM17.502 9.5H6.5v2.246c0 .38.282.694.648.743l.102.007h9.503a.75.75 0 0 0 .743-.648l.007-.102z\"/></svg>", "kb": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M2 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm4 2v.01m4-.01v.01m4-.01v.01m4-.01v.01M6 14v.01M18 14v.01M10 14l4 .01\"/></svg>", "kbOff": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M18 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2m4 0h10a2 2 0 0 1 2 2v8c0 .554-.226 1.056-.59 1.418M6 10v.01m4-.01v.01m4-.01v.01m4-.01v.01M6 14v.01M18 14v.01M10 14h4M3 3l18 18\"/></svg>"};
-  const BTNS=[['render','▶ Render MD','Render any markdown that is still plain text (formatted parts are left alone)'],['kb','','Keyboard on / off'],0,['undo','↶','Undo'],['redo','↷','Redo'],0,['multi','⧉','Multi-select: keep earlier selections (like Ctrl)'],['done','✓','Done: clear the selection'],0,['bold','B','Bold'],['italic','I','Italic'],['underline','U','Underline'],['strike','S','Strike'],0,['bullet','•','Bullet: put a bullet at the start of this line'],['bulletNext','↳•','Next-level bullet: new line, one level deeper'],['outdent','⇤','Decrease indent'],['indent','⇥','Increase indent'],0,['highlight','H','Highlight'],['color','A','Text colour'],0,['sizeDown','A−','Smaller'],['sizeLbl','','Size'],['sizeUp','A+','Larger'],0,['font','Font ▾','Font']];
+  /* long-press Highlight / Strike opens a colour palette; the chosen colour is remembered and tints the toolbar icon */
+  const HL_COLORS=['#facc15','#4ade80','#60a5fa','#f472b6','#fb923c','#a78bfa','#f87171','#22d3ee'];
+  const MC={highlight:'#facc15',strike:null};
+  try{ Object.assign(MC,JSON.parse(localStorage.getItem('notes-mark-colors')||'{}')); }catch(_){}
+  const saveMC=()=>{ try{ localStorage.setItem('notes-mark-colors',JSON.stringify(MC)); }catch(_){} };
+  let palMode='text', lpHit=false, lpTimer=null;
+  const TBI={"box": "<svg viewBox=\"0 0 256 256\" width=\"20\" height=\"20\"><path fill=\"currentColor\" d=\"M152 40a8 8 0 0 1-8 8h-32a8 8 0 0 1 0-16h32a8 8 0 0 1 8 8m-8 168h-32a8 8 0 0 0 0 16h32a8 8 0 0 0 0-16m64-160v24a8 8 0 0 0 16 0V48a16 16 0 0 0-16-16h-24a8 8 0 0 0 0 16Zm8 56a8 8 0 0 0-8 8v32a8 8 0 0 0 16 0v-32a8 8 0 0 0-8-8M40 152a8 8 0 0 0 8-8v-32a8 8 0 0 0-16 0v32a8 8 0 0 0 8 8m32 56H48v-24a8 8 0 0 0-16 0v24a16 16 0 0 0 16 16h24a8 8 0 0 0 0-16m0-176H48a16 16 0 0 0-16 16v24a8 8 0 0 0 16 0V48h24a8 8 0 0 0 0-16m168 176h-16v-16a8 8 0 0 0-16 0v16h-16a8 8 0 0 0 0 16h16v16a8 8 0 0 0 16 0v-16h16a8 8 0 0 0 0-16\"/></svg>", "undo": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M4 7H15C17.7614 7 20 9.23857 20 12C20 14.7614 17.7614 17 15 17H8.00001M7 10L4 7L7 4\"/></svg>", "redo": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M20 7H9.00001C6.23858 7 4 9.23857 4 12C4 14.7614 6.23858 17 9 17H16M17 10L20 7L17 4\"/></svg>", "multi": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><path fill=\"currentColor\" d=\"M15.28 9.03a.75.75 0 0 0-1.06-1.06L10 12.19l-1.97-1.97a.75.75 0 1 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0zM3 6.25A3.25 3.25 0 0 1 6.25 3h9.5A3.25 3.25 0 0 1 19 6.25v9.5A3.25 3.25 0 0 1 15.75 19h-9.5A3.25 3.25 0 0 1 3 15.75zM6.25 4.5A1.75 1.75 0 0 0 4.5 6.25v9.5c0 .966.784 1.75 1.75 1.75h9.5a1.75 1.75 0 0 0 1.75-1.75v-9.5a1.75 1.75 0 0 0-1.75-1.75zm2.991 17A3.25 3.25 0 0 1 6.5 19.999h9.746A3.753 3.753 0 0 0 20 16.246V6.5a3.25 3.25 0 0 1 1.5 2.741v7.005a5.254 5.254 0 0 1-5.254 5.254z\"/></svg>", "done": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linejoin=\"round\" d=\"M8.5 12.5L10.5 14.5L15.5 9.5\"/></g></svg>", "sizeDown": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M15 12H9\"/></g></svg>", "sizeUp": "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15\"/></g></svg>", "bold": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M7 5h6a3.5 3.5 0 0 1 0 7H7zm6 7h1a3.5 3.5 0 0 1 0 7H7v-7\"/></svg>", "italic": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M11 5h6M7 19h6m1-14l-4 14\"/></svg>", "underline": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M7 5v5a5 5 0 0 0 10 0V5M5 19h14\"/></svg>", "strike": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M5 12h14m-3-5.5A4 2 0 0 0 12 5h-1a3.5 3.5 0 0 0 0 7h2a3.5 3.5 0 0 1 0 7h-1.5a4 2 0 0 1-4-1.5\"/></svg>", "bullet": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M3.25 17.5a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493L21.25 13H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5z\"/></svg>", "bulletNext": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M7.25 17.5a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h10.5a.75.75 0 0 1 .102 1.493l-.102.007h-10.5a.75.75 0 0 1-.102-1.493zh10.5zm-7.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493L21.25 13H6.75a.75.75 0 0 1-.102-1.493zh14.5zm-3.5-7a1.25 1.25 0 1 1 0 2.499a1.25 1.25 0 0 1 0-2.499m3.5.5h14.5a.75.75 0 0 1 .102 1.493l-.102.007H6.75a.75.75 0 0 1-.102-1.493zh14.5z\"/></svg>", "outdent": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M20 6h-7m7 6h-9m9 6h-7M8 8l-4 4l4 4\"/></svg>", "indent": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M20 6H9m11 6h-7m7 6H9M4 8l4 4l-4 4\"/></svg>", "highlight": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"currentColor\" d=\"M20.259 2.004a.75.75 0 0 1 .742.649l.007.102l-.004 4.497a2.254 2.254 0 0 1-2.001 2.234v2.26a2.25 2.25 0 0 1-2.096 2.245l-.154.005H16.5v2.792a2.25 2.25 0 0 1-1.14 1.958l-.155.08l-6.635 3.106a.75.75 0 0 1-1.061-.579l-.007-.1v-7.257H7.25A2.25 2.25 0 0 1 5.005 11.9L5 11.746v-2.26a2.25 2.25 0 0 1-1.994-2.072L3 7.25V2.754a.75.75 0 0 1 1.493-.102l.007.102V7.25c0 .38.282.694.648.744L5.25 8h13.501c.38 0 .695-.283.746-.649l.007-.101l.004-4.497a.75.75 0 0 1 .75-.75M15 13.996H9.003v6.077l5.567-2.606a.75.75 0 0 0 .424-.572l.008-.107zM17.502 9.5H6.5v2.246c0 .38.282.694.648.743l.102.007h9.503a.75.75 0 0 0 .743-.648l.007-.102z\"/></svg>", "kb": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M2 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm4 2v.01m4-.01v.01m4-.01v.01m4-.01v.01M6 14v.01M18 14v.01M10 14l4 .01\"/></svg>", "kbOff": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.7\" d=\"M18 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2m4 0h10a2 2 0 0 1 2 2v8c0 .554-.226 1.056-.59 1.418M6 10v.01m4-.01v.01m4-.01v.01m4-.01v.01M6 14v.01M18 14v.01M10 14h4M3 3l18 18\"/></svg>"};
+  const BTNS=[['render','▶ Render MD','Render any markdown that is still plain text (formatted parts are left alone)'],['kb','','Keyboard on / off'],0,['undo','↶','Undo'],['redo','↷','Redo'],0,['multi','⧉','Multi-select: keep earlier selections (like Ctrl)'],['done','✓','Done: clear the selection'],['box','▭','Box select: draw a rectangle to select the text inside it (two fingers scroll)'],0,['bold','B','Bold'],['italic','I','Italic'],['underline','U','Underline'],['strike','S','Strike (hold for colours)'],0,['bullet','•','Bullet: put a bullet at the start of this line'],['bulletNext','↳•','Next-level bullet: new line, one level deeper'],['outdent','⇤','Decrease indent'],['indent','⇥','Increase indent'],0,['highlight','H','Highlight (hold for colours)'],['color','A','Text colour'],0,['sizeDown','A−','Smaller'],['sizeLbl','','Size'],['sizeUp','A+','Larger'],0,['font','Font ▾','Font']];
   function build(){
     const st=document.createElement('style');
     st.textContent='#v2tb,#v2tbPal,#v2tbFont{position:fixed;z-index:99990;display:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;border:1px solid var(--gl-bd);background:linear-gradient(135deg,var(--gl-a),var(--gl-b)),var(--gl-pop);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);box-shadow:0 10px 30px var(--gl-sh),inset 0 1px 0 var(--gl-in);color:var(--fg)}'
@@ -955,13 +1029,12 @@ const V2TB=(function(){
       if(!b){ const i=document.createElement('i'); i.className='sp'; el.appendChild(i); return; }
       if(b[0]==='sizeLbl'){ sizeLbl=document.createElement('span'); sizeLbl.className='sz'; sizeLbl.textContent='–'; el.appendChild(sizeLbl); return; }
       const bt=document.createElement('button'); bt.type='button'; bt.dataset.c=b[0]; bt.title=b[2]; bt.setAttribute('aria-label',b[2]);
-      if(b[0]==='color'){ bt.innerHTML='<span>Aa</span>'; colBtn=bt.firstChild; } else if(b[0]==='render') bt.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.088 6.412a2.84 2.84 0 0 0-1.347-.955l-1.378-.448a.544.544 0 0 1 0-1.025l1.378-.448A2.84 2.84 0 0 0 15.5 1.774l.011-.034l.448-1.377a.544.544 0 0 1 1.027 0l.447 1.377a2.84 2.84 0 0 0 1.799 1.796l1.377.448l.028.007a.544.544 0 0 1 0 1.025l-1.378.448a2.84 2.84 0 0 0-1.798 1.796l-.448 1.377l-.013.034a.544.544 0 0 1-1.013-.034l-.448-1.377a2.8 2.8 0 0 0-.45-.848m7.695 3.801l-.766-.248a1.58 1.58 0 0 1-.998-.999l-.25-.764a.302.302 0 0 0-.57 0l-.248.764a1.58 1.58 0 0 1-.984.999l-.765.248a.302.302 0 0 0 0 .57l.765.249a1.58 1.58 0 0 1 1 1.002l.248.764a.302.302 0 0 0 .57 0l.249-.764a1.58 1.58 0 0 1 .999-.999l.765-.248a.302.302 0 0 0 0-.57zM12.047 3H6.25A3.25 3.25 0 0 0 3 6.25v11.5A3.25 3.25 0 0 0 6.25 21h11.5A3.25 3.25 0 0 0 21 17.75v-3.819a1.29 1.29 0 0 1-1.5-.307v4.126a1.75 1.75 0 0 1-1.75 1.75H6.25a1.75 1.75 0 0 1-1.75-1.75V6.25c0-.966.784-1.75 1.75-1.75H11v-.031a1.6 1.6 0 0 1 .28-.9A1.65 1.65 0 0 1 12.047 3m2.526 4.5H11.25a.75.75 0 0 0 0 1.5H15v-.001l-.41-1.45zM7.75 9.25a1 1 0 1 0 0-2a1 1 0 0 0 0 2M10.5 12a.75.75 0 0 1 .75-.75h5.5a.75.75 0 1 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75m0 3.75a.75.75 0 0 1 .75-.75h5.5a.75.75 0 1 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75M7.75 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2m0 3.75a1 1 0 1 0 0-2a1 1 0 0 0 0 2"/></svg>'; else if(TBI[b[0]]) bt.innerHTML=TBI[b[0]]; else bt.textContent=b[1];
+      if(b[0]==='color'){ bt.innerHTML='<span>Aa</span>'; colBtn=bt.firstChild; } else if(b[0]==='render') bt.innerHTML='<svg class="rgbico" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M15.088 6.412a2.84 2.84 0 0 0-1.347-.955l-1.378-.448a.544.544 0 0 1 0-1.025l1.378-.448A2.84 2.84 0 0 0 15.5 1.774l.011-.034l.448-1.377a.544.544 0 0 1 1.027 0l.447 1.377a2.84 2.84 0 0 0 1.799 1.796l1.377.448l.028.007a.544.544 0 0 1 0 1.025l-1.378.448a2.84 2.84 0 0 0-1.798 1.796l-.448 1.377l-.013.034a.544.544 0 0 1-1.013-.034l-.448-1.377a2.8 2.8 0 0 0-.45-.848m7.695 3.801l-.766-.248a1.58 1.58 0 0 1-.998-.999l-.25-.764a.302.302 0 0 0-.57 0l-.248.764a1.58 1.58 0 0 1-.984.999l-.765.248a.302.302 0 0 0 0 .57l.765.249a1.58 1.58 0 0 1 1 1.002l.248.764a.302.302 0 0 0 .57 0l.249-.764a1.58 1.58 0 0 1 .999-.999l.765-.248a.302.302 0 0 0 0-.57zM12.047 3H6.25A3.25 3.25 0 0 0 3 6.25v11.5A3.25 3.25 0 0 0 6.25 21h11.5A3.25 3.25 0 0 0 21 17.75v-3.819a1.29 1.29 0 0 1-1.5-.307v4.126a1.75 1.75 0 0 1-1.75 1.75H6.25a1.75 1.75 0 0 1-1.75-1.75V6.25c0-.966.784-1.75 1.75-1.75H11v-.031a1.6 1.6 0 0 1 .28-.9A1.65 1.65 0 0 1 12.047 3m2.526 4.5H11.25a.75.75 0 0 0 0 1.5H15v-.001l-.41-1.45zM7.75 9.25a1 1 0 1 0 0-2a1 1 0 0 0 0 2M10.5 12a.75.75 0 0 1 .75-.75h5.5a.75.75 0 1 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75m0 3.75a.75.75 0 0 1 .75-.75h5.5a.75.75 0 1 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75M7.75 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2m0 3.75a1 1 0 1 0 0-2a1 1 0 0 0 0 2"/></svg>'; else if(TBI[b[0]]) bt.innerHTML=TBI[b[0]]; else bt.textContent=b[1];
       if(b[0]==='font'){ fontBtn=bt; bt.innerHTML='<span>Font</span>'+CHEV; }
       el.appendChild(bt);
     });
     pal=document.createElement('div'); pal.id='v2tbPal';
-    COLORS.forEach(c=>{ const b=document.createElement('button'); b.type='button'; b.dataset.color=c; b.style.background=c; pal.appendChild(b); });
-    const au=document.createElement('button'); au.type='button'; au.className='auto'; au.dataset.color=''; au.textContent='Auto'; pal.appendChild(au);
+    fillPal('text');
     fpop=document.createElement('div'); fpop.id='v2tbFont';
     V2_FONTS.forEach(f=>{ if(!f.stack) return; const b=document.createElement('button'); b.type='button'; b.dataset.font=f.key; b.textContent=f.label; b.style.fontFamily=V2_FONT_STACKS[f.key]; fpop.appendChild(b); });
     document.body.appendChild(el); document.body.appendChild(pal); document.body.appendChild(fpop);
@@ -970,12 +1043,25 @@ const V2TB=(function(){
       x.addEventListener('mousedown',e=>e.preventDefault());
       x.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
     });
-    el.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b&&b.dataset.c) act(b.dataset.c); });
+    el.addEventListener('click',e=>{ if(lpHit){ lpHit=false; return; } const b=e.target.closest('button'); if(b&&b.dataset.c) act(b.dataset.c); });
+    { let sx=0,sy=0; const lpCancel=()=>{ if(lpTimer){ clearTimeout(lpTimer); lpTimer=null; } };
+      el.addEventListener('pointerdown',e=>{ const b=e.target.closest('button'); lpCancel(); lpHit=false;
+        if(!b||(b.dataset.c!=='highlight'&&b.dataset.c!=='strike')||b.classList.contains('dim')) return;
+        sx=e.clientX; sy=e.clientY;
+        lpTimer=setTimeout(()=>{ lpTimer=null; if(!ed()) return; lpHit=true; if(navigator.vibrate){ try{ navigator.vibrate(15); }catch(_){} }
+          openPal(b.dataset.c==='highlight'?'hl':'strike'); },450); });
+      el.addEventListener('pointermove',e=>{ if(lpTimer&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8)) lpCancel(); });
+      ['pointerup','pointercancel','pointerleave'].forEach(t=>el.addEventListener(t,lpCancel));
+      el.addEventListener('contextmenu',e=>e.preventDefault()); }
     pal.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||!ed()) return;
-      const col=b.dataset.color; runAll(c=>col?c.setColor(col):c.unsetColor().removeEmptyTextStyle());
+      const col=b.dataset.color;
+      if(palMode==='hl'){ if(col){ MC.highlight=col; saveMC(); runAll(c=>c.setMark('highlight',{color:col})); } else runAll(c=>c.unsetMark('highlight')); }
+      else if(palMode==='strike'){ MC.strike=col||null; saveMC(); runAll(c=>c.setMark('strike',{color:col||null})); }
+      else runAll(c=>col?c.setColor(col):c.unsetColor().removeEmptyTextStyle());
       pal.style.display='none'; sync(); });
     fpop.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||!b.dataset.font||!ed()) return;
       const ff=b.dataset.font; runAll(c=>c.setMark('textStyle',{fontFamily:ff})); fpop.style.display='none'; sync(); });
+    bindBox();
     if(window.visualViewport){ visualViewport.addEventListener('resize',place); visualViewport.addEventListener('scroll',place); }
     window.addEventListener('resize',place);
   }
@@ -1023,10 +1109,77 @@ const V2TB=(function(){
     for(const r of allSel(e)) e.state.doc.nodesBetween(r.from,r.to,n=>{ if(n.isText){ any=true; if(!type.isInSet(n.marks)) all=false; } });
     return any&&all;
   }
+  /* box select: draw a rectangle; every character whose centre lies inside it is selected (any text flow).
+     Reuses the multi-select ranges, so formatting buttons apply to all of them. With Multi on, boxes accumulate.
+     One finger draws; two fingers scroll the page. */
+  let boxOn=false, boxRect=null, boxDrag=null, boxScroll=null;
+  function boxPick(r){
+    const e=ed(), v=e.view, ps=[];
+    e.state.doc.descendants((n,pos)=>{
+      if(!n.isTextblock) return true;
+      const dom=v.nodeDOM(pos);
+      if(dom&&dom.getBoundingClientRect){ const q=dom.getBoundingClientRect(); if(q.bottom<r.t||q.top>r.b||q.right<r.l||q.left>r.r) return false; }
+      n.forEach((c,off)=>{ if(!c.isText) return;
+        for(let i=0;i<c.text.length;i++){ const p=pos+1+off+i; let a,b;
+          try{ a=v.coordsAtPos(p,1); b=v.coordsAtPos(p+1,-1); }catch(_){ continue; }
+          const cy=(a.top+a.bottom)/2; let cx=a.left; if(Math.abs(b.top-a.top)<4&&b.left>a.left) cx=(a.left+b.left)/2;
+          if(cx>=r.l&&cx<=r.r&&cy>=r.t&&cy<=r.b) ps.push(p); } });
+      return false; });
+    return msMerge(ps.map(p=>({from:p,to:p+1})));
+  }
+  function boxFinish(d){
+    const r={l:Math.min(d.x0,d.x1),r:Math.max(d.x0,d.x1),t:Math.min(d.y0,d.y1),b:Math.max(d.y0,d.y1)};
+    if(r.r-r.l<6||r.b-r.t<6||!ed()) return;
+    const got=boxPick(r), e=ed();
+    if(multiOn) msSet(e,msMerge(msRanges(e).concat(got))); else if(got.length) msSet(e,got);
+    sync();
+  }
+  function boxDraw(d){
+    if(!boxRect){ boxRect=document.createElement('div'); boxRect.style.cssText='position:fixed;z-index:99989;pointer-events:none;border:2px dashed #2563eb;background:rgba(37,99,235,.12);border-radius:3px'; document.body.appendChild(boxRect); }
+    boxRect.style.left=Math.min(d.x0,d.x1)+'px'; boxRect.style.top=Math.min(d.y0,d.y1)+'px';
+    boxRect.style.width=Math.abs(d.x1-d.x0)+'px'; boxRect.style.height=Math.abs(d.y1-d.y0)+'px';
+  }
+  function boxClear(){ boxDrag=null; if(boxRect){ boxRect.remove(); boxRect=null; } }
+  function scroller(){ for(let n=box&&box.rd;n&&n!==document.body;n=n.parentElement){ const o=getComputedStyle(n).overflowY; if((o==='auto'||o==='scroll')&&n.scrollHeight>n.clientHeight) return n; } return document.scrollingElement||document.documentElement; }
+  function modePop(){ // same animated popup as Render, tells which selection modes are on
+    if(!window.rPop) return;
+    if(boxOn&&multiOn) window.rPop('ok','Box + Multi select on','Draw many boxes; two fingers scroll');
+    else if(boxOn) window.rPop('ok','Box select on','Draw a box over text; two fingers scroll');
+    else if(multiOn) window.rPop('ok','Multi select on','Selections are kept as you add more');
+    else window.rPop('none','Selection modes off','');
+  }
+  function bindBox(){
+    const inBox=t=>box&&box.rd&&box.rd.contains(t)&&!(el.contains(t)||pal.contains(t)||fpop.contains(t));
+    const mid=ts=>({x:(ts[0].clientX+ts[1].clientX)/2,y:(ts[0].clientY+ts[1].clientY)/2});
+    document.addEventListener('touchstart',e=>{ if(!boxOn||!ed()||!inBox(e.target)) return;
+      e.preventDefault();
+      if(e.touches.length>=2){ boxClear(); const m=mid(e.touches); boxScroll={y:m.y,s:scroller()}; return; }
+      boxScroll=null; const t=e.touches[0]; boxDrag={x0:t.clientX,y0:t.clientY,x1:t.clientX,y1:t.clientY}; },{passive:false,capture:true});
+    document.addEventListener('touchmove',e=>{ if(!boxOn) return;
+      if(e.touches.length>=2&&(boxScroll||boxDrag||inBox(e.target))){ e.preventDefault(); boxClear(); const m=mid(e.touches);
+        if(!boxScroll) boxScroll={y:m.y,s:scroller()}; boxScroll.s.scrollTop-=m.y-boxScroll.y; boxScroll.y=m.y; return; }
+      if(boxDrag&&e.touches.length===1){ e.preventDefault(); const t=e.touches[0]; boxDrag.x1=t.clientX; boxDrag.y1=t.clientY; boxDraw(boxDrag); } },{passive:false,capture:true});
+    const end=e=>{ if(!boxOn) return; if(boxDrag&&e.touches.length===0){ const d=boxDrag; boxClear(); boxFinish(d); } if(e.touches.length===0) boxScroll=null; if(e.type==='touchcancel') boxClear(); };
+    document.addEventListener('touchend',end,{capture:true}); document.addEventListener('touchcancel',end,{capture:true});
+    document.addEventListener('mousedown',e=>{ if(!boxOn||e.button!==0||!ed()||!inBox(e.target)) return; e.preventDefault(); boxDrag={x0:e.clientX,y0:e.clientY,x1:e.clientX,y1:e.clientY}; },true);
+    document.addEventListener('mousemove',e=>{ if(!boxDrag||e.touches) return; boxDrag.x1=e.clientX; boxDrag.y1=e.clientY; boxDraw(boxDrag); },true);
+    document.addEventListener('mouseup',()=>{ if(!boxDrag) return; const d=boxDrag; boxClear(); boxFinish(d); },true);
+  }
   function tog(name,Name){
     const e=ed();
     if(!msRanges(e).length){ e.chain().focus()['toggle'+Name]().run(); return; }
     const on=allMarked(name); runAll(c=>on?c['unset'+Name]():c['set'+Name]());
+  }
+  function fillPal(mode){ // text colours, highlight colours or strike-through colours share one popup
+    palMode=mode; pal.innerHTML='';
+    (mode==='hl'?HL_COLORS:COLORS).forEach(c=>{ const b=document.createElement('button'); b.type='button'; b.dataset.color=c; b.style.background=c; pal.appendChild(b); });
+    const au=document.createElement('button'); au.type='button'; au.className='auto'; au.dataset.color='';
+    au.textContent=mode==='hl'?'None':mode==='strike'?'Default':'Auto'; pal.appendChild(au);
+  }
+  function openPal(mode){ if(pal.style.display==='flex'&&palMode===mode){ pal.style.display='none'; return; } fillPal(mode); pal.style.display='flex'; place(); }
+  function tapMark(name){ // tap: toggle the mark using the last chosen colour
+    const e=ed(); const on=msRanges(e).length?allMarked(name):e.isActive(name);
+    runAll(c=>on?c.unsetMark(name):c.setMark(name,{color:MC[name]}));
   }
   function place(){ // sit above the on-screen keyboard and the bottom safe area
     if(!el||el.style.display==='none') return;
@@ -1047,16 +1200,17 @@ const V2TB=(function(){
       case 'bold': tog('bold','Bold'); break;
       case 'italic': tog('italic','Italic'); break;
       case 'underline': tog('underline','Underline'); break;
-      case 'strike': tog('strike','Strike'); break;
-      case 'highlight': tog('highlight','Highlight'); break;
+      case 'strike': tapMark('strike'); break;
+      case 'highlight': tapMark('highlight'); break;
       case 'bullet': TE.bulletBtn(e); break;
       case 'bulletNext': TE.nextBullet(e); break;
       case 'indent': TE.indentSel(e,1); break;
       case 'outdent': TE.indentSel(e,-1); break;
-      case 'multi': multiOn=!multiOn; if(!multiOn&&msRanges(e).length) msSet(e,[]); ch().run(); break;
+      case 'box': boxOn=!boxOn; boxClear(); modePop(); break;
+      case 'multi': multiOn=!multiOn; if(!multiOn&&msRanges(e).length) msSet(e,[]); ch().run(); modePop(); break;
       case 'done': { const all=allSel(e); const end=all.length?all[all.length-1].to:e.state.selection.to;
         if(msRanges(e).length) msSet(e,[]); ch().setTextSelection(end).run(); break; }
-      case 'color': pal.style.display=pal.style.display==='flex'?'none':'flex'; place(); break;
+      case 'color': openPal('text'); break;
       case 'sizeUp': step(1); break;
       case 'sizeDown': step(-1); break;
       case 'font': fpop.style.display=fpop.style.display==='flex'?'none':'flex'; place(); break;
@@ -1079,12 +1233,16 @@ const V2TB=(function(){
       let on=false;
       if(!raw){ if(c==='bold') on=e.isActive('bold'); else if(c==='italic') on=e.isActive('italic'); else if(c==='underline') on=e.isActive('underline'); else if(c==='strike') on=e.isActive('strike'); else if(c==='highlight') on=e.isActive('highlight'); else if(c==='bullet') on=e.isActive('bulletList'); }
       if(c==='multi') on=multiOn;
+      if(c==='box') on=boxOn;
       if(c==='kb'){ on=!document.getElementById('bKb').classList.contains('off'); if(b.dataset.s!==(on?'1':'0')){ b.dataset.s=on?'1':'0'; b.innerHTML=on?TBI.kb:TBI.kbOff; } }
       b.classList.toggle('on',on);
       if(c==='undo'){ let k=true; try{ k=e.can().undo(); }catch(_){} b.style.opacity=k?'':'.4'; }
       if(c==='redo'){ let k=true; try{ k=e.can().redo(); }catch(_){} b.style.opacity=k?'':'.4'; }
     });
     if(colBtn) colBtn.style.borderBottomColor=ts.color||boxTextColor(box);
+    { const hb=el.querySelector('[data-c=highlight]'), sb=el.querySelector('[data-c=strike]');
+      if(hb){ hb.style.backgroundImage='none'; const s=hb.querySelector('svg'); if(s) s.style.color=MC.highlight||''; }
+      if(sb){ const s=sb.querySelector('svg'); if(s) s.style.color=MC.strike||''; } }
     sizeLbl.textContent=raw?'–':String(Math.round((ts.fontSize||1)*(box.fontSize||16)*10)/10);
     const fe=V2_FONTS.find(f=>f.key===(ts.fontFamily||box.fontFamily||'sans'));
     fontBtn.innerHTML='<span></span>'+CHEV; fontBtn.firstChild.textContent=fe?fe.label:'Font';
@@ -1092,7 +1250,7 @@ const V2TB=(function(){
     if(raw){ pal.style.display='none'; fpop.style.display='none'; }
   }
   function show(b){ if(!el) build(); if(box!==b) multiOn=false; box=b; el.style.display='flex'; sync(); place(); }
-  function hide(){ box=null; multiOn=false; if(!el) return; el.style.display='none'; pal.style.display='none'; fpop.style.display='none'; }
+  function hide(){ box=null; multiOn=false; boxOn=false; boxClear(); if(!el) return; el.style.display='none'; pal.style.display='none'; fpop.style.display='none'; }
   return {show,hide,sync,attach};
 })();
 
@@ -1363,7 +1521,7 @@ const V2TB=(function(){
     if(looksMd(md)) insertRendered(view,md); else TE.pasteRaw(B,md);
     return true;
   }
-  window.v2RenderPending=function(){ if(!B.editor) return; const n=autoRender(true); toast(n>0?'Rendered':'Nothing to render'); };
+  window.v2RenderPending=function(){ if(!B.editor){ window.rPop&&window.rPop('warn','Editor not ready'); return; } window.rFlash&&window.rFlash(); let n=0; try{ n=autoRender(true); }catch(e){ console.error(e); window.rPop&&window.rPop('err','Render failed'); return; } if(window.rPop) window.rPop(n>0?'ok':'none', n>0?'Rendered':'Nothing found'); else toast(n>0?'Rendered':'Nothing to render'); };
   function stop(){ if(!B.editor) return; pull(); B.editor.destroy(); B.editor=null; }
   function start(){
     stop(); ensureFmt(); B.mode='rendered';
@@ -2160,6 +2318,49 @@ const compressPdfBytes=(()=>{
     }
     for(const [ref] of ctx.enumerateIndirectObjects()) if(!seen.has(ref.toString())) ctx.delete(ref);
     return await doc.save({useObjectStreams:true});
+  };
+})();
+</script>
+<script>
+/* v33: auto-hide header on scroll */
+(function(){
+  var body=document.body,tIn=document.getElementById('tIn');
+  var last=window.pageYOffset||0,acc=0,resizedAt=0;
+  window.addEventListener('resize',function(){resizedAt=Date.now();last=window.pageYOffset||0;acc=0;});
+  function hide(){body.classList.add('hdr-h');}
+  function show(){body.classList.remove('hdr-h');}
+  window.addEventListener('scroll',function(){
+    var y=Math.max(0,window.pageYOffset||0),d=y-last;last=y;
+    if(Date.now()-resizedAt<400)return;
+    if(y<=56||(tIn&&document.activeElement===tIn)){show();acc=0;return;}
+    if(d>0){acc=acc>0?acc+d:d;if(acc>14)hide();}
+    else if(d<0){acc=acc<0?acc+d:d;if(acc<-8)show();}
+  },{passive:true});
+  if(tIn)tIn.addEventListener('focus',show);
+})();
+</script>
+<div id="rpop" role="status" aria-live="polite"></div>
+<script>
+/* v34: animated render result popup + click-only icon animation */
+(function(){
+  var pop=document.getElementById('rpop'),t1,t2;
+  var MARK={ok:'<path class="rm" d="M9 16.5l4.5 4.5L22 11"/>',
+            none:'<path class="rm" d="M11 11l10 10M21 11L11 21"/>',
+            warn:'<path class="rm" d="M16 9v8M16 21.5v.1"/>',
+            err:'<path class="rm" d="M16 9v8M16 21.5v.1"/>'};
+  var SUB={ok:'Markdown converted',none:'No markdown found',warn:'Try again in a moment',err:'Something went wrong'};
+  window.rPop=function(kind,title,sub){
+    clearTimeout(t1);clearTimeout(t2);
+    pop.className='';void pop.offsetWidth;
+    pop.innerHTML='<svg class="ri" viewBox="0 0 32 32"><circle class="rc" cx="16" cy="16" r="12"/>'+(MARK[kind]||MARK.ok)+'</svg><div>'+title+'<span class="rs">'+(sub!=null?sub:(SUB[kind]||''))+'</span></div>';
+    pop.className=kind+' show';
+    t1=setTimeout(function(){pop.className=kind+' hide';},1900);
+    t2=setTimeout(function(){pop.className='';},2200);
+  };
+  window.rFlash=function(){
+    var sv=document.querySelector('#v2tb [data-c=render] svg.rgbico');if(!sv)return;
+    sv.classList.remove('go');void sv.getBoundingClientRect();sv.classList.add('go');
+    sv.addEventListener('animationend',function f(){sv.classList.remove('go');sv.removeEventListener('animationend',f);});
   };
 })();
 </script>
