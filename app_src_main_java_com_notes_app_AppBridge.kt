@@ -1,5 +1,7 @@
 package com.notes.app
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.Context
 import android.os.Environment
@@ -25,6 +27,25 @@ class AppBridge(private val context: Context) {
 
     @JavascriptInterface
     fun toast(msg: String) = toastNow(msg)
+
+    @JavascriptInterface
+    fun setClipboard(text: String) {
+        main.post {
+            val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            cm.setPrimaryClip(ClipData.newPlainText("note", text))
+        }
+    }
+
+    @JavascriptInterface
+    fun getClipboard(): String {
+        return try {
+            val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = cm.primaryClip
+            if (clip == null || clip.itemCount == 0) "" else clip.getItemAt(0).coerceToText(context).toString()
+        } catch (e: Exception) {
+            ""
+        }
+    }
 
     @JavascriptInterface
     fun saveFile(name: String, mime: String, base64: String) {
